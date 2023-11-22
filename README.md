@@ -12,7 +12,7 @@ The tour packager will
 - export tours in the json format,
 - grab and store media,
 - grab and create language files (when tours are multi-lingual),
-- package all in an installable zip file.
+- package all in an installable zip file. The package will contain an installer that will import tours, media and language files.
 
 Once packaged, the idea is to have a specific JED directory where people will be able to find extended core tours, third-party tours and other miscellaneous tours.
 
