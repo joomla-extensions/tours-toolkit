@@ -1,4 +1,4 @@
-# tours-packager
+# tours-toolkit
 
 This extension replaces PR #40645.
 It adds missing packaging facilities to the guided tours.
