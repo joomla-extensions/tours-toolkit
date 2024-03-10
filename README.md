@@ -22,3 +22,9 @@ The toolkit includes a plugin and a component.
 - the plugin adds the action to export the tour as json file to each tour view
 - the component contains an import feature so you can import tours.
 - there are buttons to go back and forth the toolkit and the guided tours.
+
+## The toolkit page
+![guidedtourstoolkit](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/ed78f41c-9f31-4247-b82b-c0b4378ec5b8)
+
+## Export a tour
+![guidedtourstoolkit_exporttour](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/04af9b1c-ffe1-499d-9254-0fcb28b2dcda)
