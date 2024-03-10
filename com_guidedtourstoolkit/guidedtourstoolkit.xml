@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="component" method="upgrade">
+    <name>com_guidedtourstoolkit</name>
+    <author>Joomla! Project</author>
+    <creationDate>2024-03</creationDate>
+    <copyright>(C) 2024 Open Source Matters, Inc.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>admin@joomla.org</authorEmail>
+    <authorUrl>www.joomla.org</authorUrl>
+    <version>1.0.0</version>
+    <description>COM_GUIDEDTOURSTOOLKIT_XML_DESCRIPTION</description>
+    <namespace path="src">Joomla\Component\Guidedtourstoolkit</namespace>
+    <administration>
+        <menu link="index.php?option=com_guidedtourstoolkit">COM_GUIDEDTOURSTOOLKIT</menu>
+        <files folder="admin">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <filename>guidedtourstoolkit.xml</filename>
+            <folder>services</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+        </files>
+        <languages folder="admin">
+            <language tag="en-GB">language/en-GB/com_guidedtourstoolkit.ini</language>
+            <language tag="en-GB">language/en-GB/com_guidedtourstoolkit.sys.ini</language>
+        </languages>
+    </administration>
+</extension>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<access component="com_guidedtourstoolkit">
+    <section name="component">
+        <action name="core.admin" title="JACTION_ADMIN" />
+        <action name="core.options" title="JACTION_OPTIONS" />
+        <action name="core.export" title="JACTION_EXPORT" />
+    </section>
+</access>
