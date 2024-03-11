@@ -23,6 +23,8 @@ The toolkit includes a plugin and a component.
 - the component contains an import feature so you can import tours.
 - there are buttons to go back and forth the toolkit and the guided tours.
 
+Install pkg_guidedtourstoolkit.zip, this will install bith extensions and enable the plugin.
+
 ## The toolkit page
 ![guidedtourstoolkit](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/ed78f41c-9f31-4247-b82b-c0b4378ec5b8)
 
