@@ -110,7 +110,7 @@ class ToursController extends AdminController
      *
      * @throws  \Exception
      */
-    public function import()
+    public function importjson()
     {
         // Access checks.
         if (!$this->app->getIdentity()->authorise('core.create', 'com_guidedtours')) {
@@ -120,8 +120,9 @@ class ToursController extends AdminController
         // Check for request forgeries.
         $this->checkToken();
 
-        $file     = $this->input->files->get('importfile', [], 'array');
-        $redirect = Route::_('index.php?option=com_guidedtourstoolkit&view=info' . $this->getRedirectToListAppend(), false);
+      $formfiles = $this->input->files->get('jform', [], 'array');
+      $file      = $formfiles['importjsonfile'];
+      $redirect  = Route::_('index.php?option=com_guidedtourstoolkit&view=import' . $this->getRedirectToListAppend(), false);
 
         // Check if the file exists.
         if (!isset($file['name'])) {
@@ -160,7 +161,7 @@ class ToursController extends AdminController
             // Set default message on error - overwrite if successful
             $this->setMessage(Text::_('COM_GUIDEDTOURSTOOLKIT_TOURS_IMPORT_NO_TOUR_IMPORTED'), 'error');
 
-            if ($count = $model->import($data)) {
+            if ($count = $model->importjson($data)) {
                 $this->setMessage(Text::plural('COM_GUIDEDTOURSTOOLKIT_TOURS_IMPORTED', $count));
             }
         } catch (\Exception $e) {
