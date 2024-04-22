@@ -120,9 +120,9 @@ class ToursController extends AdminController
         // Check for request forgeries.
         $this->checkToken();
 
-      $formfiles = $this->input->files->get('jform', [], 'array');
-      $file      = $formfiles['importjsonfile'];
-      $redirect  = Route::_('index.php?option=com_guidedtourstoolkit&view=import' . $this->getRedirectToListAppend(), false);
+        $formfiles = $this->input->files->get('jform', [], 'array');
+        $file      = $formfiles['importjsonfile'];
+        $redirect  = Route::_('index.php?option=com_guidedtourstoolkit&view=import' . $this->getRedirectToListAppend(), false);
 
         // Check if the file exists.
         if (!isset($file['name'])) {
