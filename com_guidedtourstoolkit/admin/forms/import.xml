@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset addfieldprefix="Joomla\Component\Guidedtourstoolkit\Administrator\Field">
+        <field name="tourid" type="tours" default="" label="COM_GUIDEDTOURSTOOLKIT_TOUR_LABEL">
+            <option value="">COM_GUIDEDTOURSTOOLKIT_TOUR_IN_CSV_VALUE</option>
+        </field>
+        
+        <field name="importjsonfile" type="file" accept=".json,application/json" label="COM_GUIDEDTOURSTOOLKIT_TOURS_IMPORT_JSONFILE_LABEL" />
+        
+        <field name="importcsvfile" type="file" accept="text/csv" label="COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSVFILE_LABEL" />
+    </fieldset>
+</form>
