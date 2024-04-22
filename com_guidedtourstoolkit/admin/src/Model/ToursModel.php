@@ -30,7 +30,7 @@ class ToursModel extends ListModel
     *
     * @return  boolean|integer returns the tour count or false on error
     */
-    public function import($data)
+    public function importjson($data)
     {
         if (empty($data)) {
             return false;
