@@ -17,6 +17,7 @@ The tour toolkit will
 Once packaged, the idea is to have a specific JED directory where people will be able to find extended core tours, third-party tours and other miscellaneous tours.
 
 Update 03/09/2024
+v1.0.0
 
 The toolkit includes a plugin and a component.
 - the plugin adds the action to export the tour as json file to each tour view
@@ -30,3 +31,10 @@ Install pkg_guidedtourstoolkit.zip, this will install both extensions and enable
 
 ## Export a tour
 ![guidedtourstoolkit_exporttour](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/04af9b1c-ffe1-499d-9254-0fcb28b2dcda)
+
+Update 04/22/2024
+v1.0.1
+
+Added the ability to import steps from a CSV file.
+
+Download the zip file and install like any other extension.
