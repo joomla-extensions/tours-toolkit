@@ -48,7 +48,7 @@ class TourController extends AdminController
                     'description' => $tour->description,
                     'extensions'  => $tour->extensions,
                     'url'         => $tour->url,
-                    'published'   => $tour->published,
+                    'published'   => 0,
                     'language'    => $tour->language,
                     'note'        => $tour->note,
                     'access'      => $tour->access,
