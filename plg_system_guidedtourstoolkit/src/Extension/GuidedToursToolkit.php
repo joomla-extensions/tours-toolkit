@@ -63,7 +63,7 @@ final class GuidedToursToolkit extends CMSPlugin implements SubscriberInterface
 
             $button = (new LinkButton('toolkit'))
                 ->text('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_TOOLKIT')
-                ->url('index.php?option=com_guidedtourstoolkit&view=info')
+                ->url('index.php?option=com_guidedtourstoolkit&view=import')
                 ->icon('icon-cog');
 
             $toolbar->appendButton($button);
