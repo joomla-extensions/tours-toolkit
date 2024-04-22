@@ -12,10 +12,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 defined('_JEXEC') or die;
 
-/** @var  \Joomla\Component\Guidedtourstoolkit\Administrator\View\Info\HtmlView  $this */
+/** @var  \Joomla\Component\Guidedtourstoolkit\Administrator\View\Import\HtmlView  $this */
 
 try {
     $app = Factory::getApplication();
