@@ -126,24 +126,24 @@ class ToursController extends AdminController
 
         // Check if the file exists.
         if (!isset($file['name'])) {
-            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_TOURS_IMPORT_INVALID_REQUEST'), 'error');
+            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_IMPORT_INVALID_REQUEST'), 'error');
             return;
         }
 
         // Check if there was a problem uploading the file.
         if ($file['error']) {
-            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_TOURS_IMPORT_FILE_ERROR'), 'error');
+            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_IMPORT_FILE_ERROR'), 'error');
             return;
         }
 
         // Check if the file has the right file type.
         if ($file['type'] !== 'application/json') {
-            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_TOURS_IMPORT_WRONG_FILE_TYPE_ERROR'), 'error');
+            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_IMPORT_WRONG_FILE_TYPE_ERROR'), 'error');
             return;
         }
 
         if (!File::exists($file['tmp_name'])) {
-            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_TOURS_IMPORT_MISSING_FILE_ERROR'), 'error');
+            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_IMPORT_MISSING_FILE_ERROR'), 'error');
             return;
         }
 
@@ -151,7 +151,7 @@ class ToursController extends AdminController
         $data = file_get_contents($file['tmp_name']);
 
         if ($data === false) {
-            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_TOURS_IMPORT_PARSING_FILE_ERROR'), 'error');
+            $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_IMPORT_PARSING_FILE_ERROR'), 'error');
             return;
         }
 
