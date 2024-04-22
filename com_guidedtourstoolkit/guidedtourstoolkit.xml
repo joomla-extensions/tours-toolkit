@@ -10,12 +10,15 @@
     <version>1.0.0</version>
     <description>COM_GUIDEDTOURSTOOLKIT_XML_DESCRIPTION</description>
     <namespace path="src">Joomla\Component\Guidedtourstoolkit</namespace>
+    <media destination="com_guidedtourstoolkit" folder="media">
+        <folder>samples</folder>
+    </media>
     <administration>
         <menu link="index.php?option=com_guidedtourstoolkit">COM_GUIDEDTOURSTOOLKIT</menu>
         <files folder="admin">
             <filename>access.xml</filename>
             <filename>config.xml</filename>
-            <filename>guidedtourstoolkit.xml</filename>
+            <folder>forms</folder>
             <folder>services</folder>
             <folder>src</folder>
             <folder>tmpl</folder>
