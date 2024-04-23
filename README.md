@@ -39,6 +39,3 @@ Added the ability to import steps from a CSV file.
 
 ## Import steps as CSV
 ![import_as_csv](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/b85324e8-1fb2-42b1-a38e-b0b706bfbdc7)
-
-
-Download the zip file and install like any other extension.
