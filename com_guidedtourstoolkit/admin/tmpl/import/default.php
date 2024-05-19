@@ -112,7 +112,7 @@ $user = $app->getIdentity();
                 </tr>
                 </tbody>
               </table>
-              <a class="btn btn-sm btn-info" href="<?php echo Uri::root() ; ?>media/com_guidedtourstoolkit/samples/sample_no_tour_id.csv" download="sample.csv"><?php echo Text::_('COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSVFILE_SAMPLE'); ?></a>
+              <a class="btn btn-sm btn-info" href="<?php echo Uri::root() ; ?>media/com_guidedtourstoolkit/samples/sample_steps_import_no_tour_id.csv" download="sample_steps_import_no_tour_id.csv"><?php echo Text::_('COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSVFILE_SAMPLE'); ?></a>
             </fieldset>
           </div>
           <!-- TODO make sample.csv file available -->
