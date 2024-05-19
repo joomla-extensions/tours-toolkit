@@ -64,7 +64,7 @@ class HtmlView extends BaseHtmlView
     $button = (new LinkButton('guidedtours'))
       ->text('COM_GUIDEDTOURSTOOLKIT_LINKBUTTON_GUIDEDTOURS')
       ->url('index.php?option=com_guidedtours&view=tours')
-      ->icon('icon-cog');
+      ->icon('icon-map-signs');
 
     $toolbar->appendButton($button);
 
