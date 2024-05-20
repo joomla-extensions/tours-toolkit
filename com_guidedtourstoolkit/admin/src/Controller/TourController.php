@@ -10,9 +10,11 @@
 
 namespace Joomla\Component\Guidedtourstoolkit\Administrator\Controller;
 
+use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Version;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -36,12 +38,15 @@ class TourController extends AdminController
             $tourModel = $factory->createModel('Tour', 'Administrator', ['ignore_request' => true]);
             $stepsModel = $factory->createModel('Steps', 'Administrator', ['ignore_request' => true]);
 
-            $data       = [];
-            $tours_data = [];
+            $data           = [];
+            $tours_data     = [];
+            $last_tour_name = '';
 
             foreach ($pks as $pk) {
                 // Get the tour data.
                 $tour = $tourModel->getItem($pk);
+
+                $last_tour_name = OutputFilter::stringURLSafe(Text::_($tour->title));
 
                 $tour_data = [
                     'title'       => $tour->title,
@@ -56,6 +61,11 @@ class TourController extends AdminController
 
                 if (isset($tour->uid)) {
                     $tour_data['uid'] = $tour->uid;
+                    $last_tour_name   = $tour->uid;
+                }
+
+                if (isset($tour->autostart)) {
+                    $tour_data['autostart'] = $tour->autostart;
                 }
 
                 // Get the steps data.
@@ -94,8 +104,18 @@ class TourController extends AdminController
 
             $this->setMessage(Text::plural('COM_GUIDEDTOURSTOOLKIT_TOURS_EXPORTED', \count($pks)));
 
+            $name = 'guidedtours';
+            if (\count($pks) == 1) {
+                $name = 'guidedtour_' . $last_tour_name;
+            }
+
+            $version       = new Version();
+            $joomlaVersion = '_joomla-' . OutputFilter::stringURLSafe($version->getShortVersion());
+
+            $dateTime = '_' . date('Y-m-d') . '_' . date('H-i-s');
+
             $this->app->setHeader('Content-Type', 'application/json', true)
-                ->setHeader('Content-Disposition', 'attachment; filename="' . $this->input->getCmd('view', 'joomla') . '.json"', true)
+                ->setHeader('Content-Disposition', 'attachment; filename="' . $name . $joomlaVersion . $dateTime . '.json"', true)
                 ->setHeader('Cache-Control', 'must-revalidate', true)
                 ->sendHeaders();
 
