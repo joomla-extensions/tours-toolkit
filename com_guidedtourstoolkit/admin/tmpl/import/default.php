@@ -103,6 +103,14 @@ $user = $app->getIdentity();
                   <td><?php echo Text::_('COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSVFILE_URL_DESC'); ?></td>
                 </tr>
                 <tr>
+                  <th>required</th>
+                  <td><?php echo Text::_('COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSVFILE_REQUIRED_DESC'); ?></td>
+                </tr>
+                <tr>
+                  <th>requiredvalue</th>
+                  <td><?php echo Text::_('COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSVFILE_REQUIREDVALUE_DESC'); ?></td>
+                </tr>
+                <tr>
                   <th>published</th>
                   <td><?php echo Text::_('COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSVFILE_PUBLISHED_DESC'); ?></td>
                 </tr>
