@@ -30,30 +30,34 @@ class StepsModel extends ListModel
      * A mapping for the step types
      */
     protected $stepTypes = [
-        'next'        => GuidedtoursComponent::STEP_NEXT,
-        'redirect'    => GuidedtoursComponent::STEP_REDIRECT,
-        'interactive' => GuidedtoursComponent::STEP_INTERACTIVE,
+        'next'        => [GuidedtoursComponent::STEP_NEXT, 'COM_GUIDEDTOURS_FIELD_VALUE_STEP_TYPE_NEXT'],
+        'redirect'    => [GuidedtoursComponent::STEP_REDIRECT, 'COM_GUIDEDTOURS_FIELD_VALUE_STEP_TYPE_REDIRECT'],
+        'interactive' => [GuidedtoursComponent::STEP_INTERACTIVE, 'COM_GUIDEDTOURS_FIELD_VALUE_STEP_TYPE_INTERACTIVE'],
     ];
 
     /**
      * A mapping for the step interactive types
      */
     protected $stepInteractiveTypes = [
-        'submit'         => GuidedtoursComponent::STEP_INTERACTIVETYPE_FORM_SUBMIT,
-        'text'           => GuidedtoursComponent::STEP_INTERACTIVETYPE_TEXT,
-        'other'          => GuidedtoursComponent::STEP_INTERACTIVETYPE_OTHER,
-        'button'         => GuidedtoursComponent::STEP_INTERACTIVETYPE_BUTTON,
-        'checkbox_radio' => GuidedtoursComponent::STEP_INTERACTIVETYPE_CHECKBOX_RADIO,
-        'select'         => GuidedtoursComponent::STEP_INTERACTIVETYPE_SELECT,
+        'submit'         => [GuidedtoursComponent::STEP_INTERACTIVETYPE_FORM_SUBMIT, 'COM_GUIDEDTOURS_FIELD_VALUE_INTERACTIVESTEP_TYPE_FORM_SUBMIT'],
+        'text'           => [GuidedtoursComponent::STEP_INTERACTIVETYPE_TEXT, 'COM_GUIDEDTOURS_FIELD_VALUE_INTERACTIVESTEP_TYPE_TEXT_FIELD'],
+        'other'          => [GuidedtoursComponent::STEP_INTERACTIVETYPE_OTHER, 'COM_GUIDEDTOURS_FIELD_VALUE_INTERACTIVESTEP_TYPE_OTHER'],
+        'button'         => [GuidedtoursComponent::STEP_INTERACTIVETYPE_BUTTON, 'COM_GUIDEDTOURS_FIELD_VALUE_INTERACTIVESTEP_TYPE_BUTTON'],
+        'checkbox_radio' => [GuidedtoursComponent::STEP_INTERACTIVETYPE_CHECKBOX_RADIO, 'COM_GUIDEDTOURS_FIELD_VALUE_INTERACTIVESTEP_TYPE_CHECKBOX_RADIO_FIELD'],
+        'select'         => [GuidedtoursComponent::STEP_INTERACTIVETYPE_SELECT, 'COM_GUIDEDTOURS_FIELD_VALUE_INTERACTIVESTEP_TYPE_SELECT_LIST'],
     ];
-    
+
     /**
      * Positions
      */
     protected $stepPositions = [
-        'center', 'top', 'bottom', 'left', 'right',
-    ];    
-    
+        'center' => 'JGLOBAL_CENTER',
+        'top'    => 'JGLOBAL_TOP',
+        'bottom' => 'JGLOBAL_BOTTOM',
+        'left'   => 'JGLOBAL_LEFT',
+        'right'  => 'JGLOBAL_RIGHT',
+    ];
+
     /**
     * Import csv data
     *
@@ -70,38 +74,38 @@ class StepsModel extends ListModel
         $user = $this->getCurrentUser();
         $db   = $this->getDatabase();
         $date = Factory::getDate()->toSql();
-        
+
         $delimiter = ';';
         $enclosure = '"';
 
         $columns = [];
         $steps   = [];
-        
+
         ini_set('auto_detect_line_endings', TRUE); // to deal with MAC line endings DEPRECATED
-        
-        if (($handle = fopen($file, "r")) !== FALSE) {  
+
+        if (($handle = fopen($file, "r")) !== FALSE) {
             $row = 1;
-            
+
             while (($csvdata = fgetcsv($handle, 0, $delimiter, $enclosure)) !== FALSE) {
                 $num = count($csvdata); // number of fields
-                
+
                 if ($row > 1) {
                     $step = [];
                 }
-                
+
                 for ($c = 0; $c < $num; $c++) { // go through all cells of one line
-                    
+
                     if ($row == 1) {
                         $column_name = trim(strtolower($csvdata[$c]));
-                        
+
                         $columns[] = $column_name;
-                        
+
                     } else {
                         $column = $columns[$c];
-                        
+
                         // check if the data has been escaped
                         $csvdata[$c] = str_replace('\\' . $delimiter, $delimiter, $csvdata[$c]);
-                        
+
                         if (mb_detect_encoding($csvdata[$c], 'UTF-8', true) === false) {
                             $step[$column] = utf8_encode($csvdata[$c]);
                         } else {
@@ -109,31 +113,31 @@ class StepsModel extends ListModel
                         }
                     }
                 }
-                
+
                 if ($row > 1) {
-                    
+
                     // if missing tourId, stop import
                     if (empty($tourId) && (!isset($step['tour_id']) || empty($step['tour_id']))) {
                         $errors[$row] = Text::sprintf('COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSV_MISSING_COLUMN', 'tour_id');
                         continue;
                     }
-                    
+
                     // if missing title, stop import
                     if (!isset($step['title']) || empty($step['title'])) {
                         $errors[$row] = Text::sprintf('COM_GUIDEDTOURSTOOLKIT_STEPS_IMPORT_CSV_MISSING_COLUMN', 'title');
                         continue;
                     }
-                    
+
                     $steps[] = $step;
                 }
-                
+
                 $row++;
             }
             fclose($handle);
         }
-        
+
         ini_set('auto_detect_line_endings', FALSE); // to deal with MAC line endings
-        
+
         // report the errors, if any
         if (!empty($errors)) {
             foreach ($errors as $key => $value) {
@@ -143,14 +147,14 @@ class StepsModel extends ListModel
                     Factory::getApplication()->enqueueMessage('row '.$key.' => '.$value, 'warning');
                 }
             }
-            
+
             if ((count($errors) == 1 && !isset($errors[1])) || count($errors) > 1) {
                 return false;
             }
         }
 
         // Insert steps
-        
+
         $query = $db->getQuery(true);
 
         $columns = [
@@ -171,7 +175,7 @@ class StepsModel extends ListModel
             'ordering',
             'note',
         ];
-        
+
         if (version_compare(JVERSION, '5.1', '>=')) {
             $columns[] = 'params';
         }
@@ -194,7 +198,7 @@ class StepsModel extends ListModel
             ParameterType::INTEGER,
             ParameterType::STRING,
         ];
-        
+
         if (version_compare(JVERSION, '5.1', '>=')) {
             $dataTypes[] = ParameterType::STRING;
         }
@@ -208,15 +212,50 @@ class StepsModel extends ListModel
                 continue;
             }
 
+            $step['description'] = isset($step['description']) ? trim($step['description']) : '';
+            $step['position'] = isset($step['position']) ? trim($step['position']) : '';
+            $step['target'] = isset($step['target']) ? trim($step['target']) : '';
+            $step['type'] = isset($step['type']) ? trim($step['type']) : '';
+            $step['interactive_type'] = isset($step['interactive_type']) ? trim($step['interactive_type']) : '';
+            $step['url'] = isset($step['url']) ? trim($step['url']) : '';
+            $step['note'] = isset($step['note']) ? trim($step['note']) : '';
+
+            if (!empty($step['position'])) {
+                foreach ($this->stepPositions as $key => $value) {
+                    if (Text::_($value) == $step['position']) {
+                        $step['position'] = $key;
+                    }
+                }
+            }
+
+            $lang = Factory::getLanguage();
+            $lang->load('com_guidedtours', JPATH_ADMINISTRATOR);
+
+            if (!empty($step['type'])) {
+                foreach ($this->stepTypes as $key => $value) {
+                    if (Text::_($value[1]) == $step['type']) {
+                        $step['type'] = $key;
+                    }
+                }
+            }
+
+            if (!empty($step['interactive_type'])) {
+                foreach ($this->stepInteractiveTypes as $key => $value) {
+                    if (Text::_($value[1]) == $step['interactive_type']) {
+                        $step['interactive_type'] = $key;
+                    }
+                }
+            }
+
             $tmp_step_values = [
                 !empty($tourId) ? $tourId : $step['tour_id'],
                 $step['title'],
-                isset($step['description']) && !empty($step['description']) ? $step['description'] : '',
-                isset($step['position']) && !empty($step['position']) && in_array($step['position'], $this->stepPositions) ? $step['position'] : 'center',
-                isset($step['target']) && !empty($step['target']) ? $step['target'] : '',
-                isset($step['type']) && !empty($step['type']) && isset($this->stepTypes[$step['type']]) ? $this->stepTypes[$step['type']] : 0,
-                isset($step['interactive_type']) && !empty($step['interactive_type']) && isset($this->stepInteractiveTypes[$step['type']]) ? $this->stepInteractiveTypes[$step['interactive_type']] : 1,
-                isset($step['url']) && !empty($step['url']) ? $step['url'] : '',
+                !empty($step['description']) ? $step['description'] : '',
+                !empty($step['position']) && array_key_exists($step['position'], $this->stepPositions) ? $step['position'] : 'center',
+                !empty($step['target']) ? $step['target'] : '',
+                !empty($step['type']) && isset($this->stepTypes[$step['type']]) ? $this->stepTypes[$step['type']][0] : 0,
+                !empty($step['interactive_type']) && isset($this->stepInteractiveTypes[$step['interactive_type']]) ? $this->stepInteractiveTypes[$step['interactive_type']][0] : 1,
+                !empty($step['url']) ? $step['url'] : '',
                 $date,
                 $user->id,
                 $date,
@@ -224,19 +263,27 @@ class StepsModel extends ListModel
                 $step['published'] ?? 0,
                 '*',
                 0,
-                isset($step['note']) && !empty($step['note']) ? $step['note'] : '',
+                !empty($step['note']) ? $step['note'] : '',
             ];
 
             if (version_compare(JVERSION, '5.1', '>=')) {
                 $tmp_params = [];
-                if (isset($step['required']) && !empty($step['required'])) {
-                    $tmp_params['required'] = $step['required'];
+
+                if (isset($step['required'])) {
+                    $step['required'] = intVal($step['required']);
+                    if (in_array($step['required'], [0, 1])) {
+                        $tmp_params['required'] = $step['required'];
+                    }
                 }
-                
-                if (isset($step['requiredvalue']) && !empty($step['requiredvalue'])) {
-                    $tmp_params['requiredvalue'] = $step['requiredvalue'];
+
+                if (isset($step['requiredvalue'])) {
+                    $step['requiredvalue'] = trim($step['requiredvalue']);
+                    // We allow required empty values
+                    if (!empty($step['requiredvalue']) || (isset($tmp_params['required']) && $tmp_params['required'])) {
+                        $tmp_params['requiredvalue'] = $step['requiredvalue'];
+                    }
                 }
-                
+
                 if (!empty($tmp_params)) {
                     $tmp_step_values[] = json_encode($tmp_params);
                 } else {
@@ -257,7 +304,7 @@ class StepsModel extends ListModel
         }
 
         $db->setQuery($query);
-        
+
         try {
             $result = $db->execute();
             if ($result === false) {
