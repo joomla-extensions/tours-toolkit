@@ -12,6 +12,7 @@ namespace Joomla\Component\Guidedtourstoolkit\Administrator\Model;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\ParameterType;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -249,7 +250,7 @@ class ToursModel extends ListModel
 
                     $result = $db->execute();
                 }
-            } catch (\RuntimeException $e) {
+            } catch (ExecutionFailureException $e) {
                 Factory::getApplication()->enqueueMessage($e->getQuery());
                 return false;
             }

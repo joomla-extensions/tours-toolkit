@@ -14,6 +14,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\Component\Guidedtours\Administrator\Extension\GuidedtoursComponent;
+use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\ParameterType;
 use Joomla\Utilities\ArrayHelper;
 
@@ -311,7 +312,7 @@ class StepsModel extends ListModel
             if ($result === false) {
                 return false;
             }
-        } catch (\RuntimeException $e) {
+        } catch (ExecutionFailureException $e) {
             Factory::getApplication()->enqueueMessage($e->getQuery());
             return false;
         }
