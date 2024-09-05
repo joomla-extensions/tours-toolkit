@@ -15,6 +15,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\Component\Guidedtours\Administrator\Extension\GuidedtoursComponent;
 use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -48,7 +49,7 @@ class StepsModel extends ListModel
     ];
 
     /**
-     * Positions
+     * A mapping for the step positions
      */
     protected $stepPositions = [
         'center' => 'JGLOBAL_CENTER',
@@ -316,6 +317,89 @@ class StepsModel extends ListModel
         }
 
         return count($steps);
+    }
+
+    /**
+     * Build an SQL query to load the list data.
+     * Needed because com_guidedtours translates title and description
+     *
+     * @return \Joomla\Database\DatabaseQuery
+     */
+    protected function getListQuery()
+    {
+        // Create a new query object.
+        $db    = $this->getDatabase();
+        $query = $db->getQuery(true);
+
+        // Select the required fields from the table.
+        $query->select(
+            $this->getState(
+                'list.select',
+                'a.*'
+            )
+        );
+
+        $query->from($db->quoteName('#__guidedtour_steps', 'a'));
+
+        // Join with user table
+        $query->select(
+            [
+                $db->quoteName('uc.name', 'editor'),
+            ]
+        )
+            ->join('LEFT', $db->quoteName('#__users', 'uc'), $db->quoteName('uc.id') . ' = ' . $db->quoteName('a.checked_out'));
+
+        $tourId = $this->getState('filter.tour_id');
+
+        if (is_numeric($tourId)) {
+            $tourId = (int) $tourId;
+            $query->where($db->quoteName('a.tour_id') . ' = :tour_id')
+                ->bind(':tour_id', $tourId, ParameterType::INTEGER);
+        } elseif (\is_array($tourId)) {
+            $tourId = ArrayHelper::toInteger($tourId);
+            $query->whereIn($db->quoteName('a.tour_id'), $tourId);
+        }
+
+        // Published state
+        $published = (string) $this->getState('filter.published');
+
+        if (is_numeric($published)) {
+            $query->where($db->quoteName('a.published') . ' = :published');
+            $query->bind(':published', $published, ParameterType::INTEGER);
+        } elseif ($published === '') {
+            $query->where('(' . $db->quoteName('a.published') . ' = 0 OR ' . $db->quoteName('a.published') . ' = 1)');
+        }
+
+        // Filter by search in title.
+        $search = $this->getState('filter.search');
+
+        if (!empty($search)) {
+            if (stripos($search, 'id:') === 0) {
+                $search = (int) substr($search, 3);
+                $query->where($db->quoteName('a.id') . ' = :search')
+                    ->bind(':search', $search, ParameterType::INTEGER);
+            } elseif (stripos($search, 'description:') === 0) {
+                $search = '%' . substr($search, 12) . '%';
+                $query->where('(' . $db->quoteName('a.description') . ' LIKE :search1)')
+                    ->bind([':search1'], $search);
+            } else {
+                $search = '%' . str_replace(' ', '%', trim($search)) . '%';
+                $query->where(
+                    '(' . $db->quoteName('a.title') . ' LIKE :search1'
+                    . ' OR ' . $db->quoteName('a.description') . ' LIKE :search2'
+                    . ' OR ' . $db->quoteName('a.note') . ' LIKE :search3)'
+                )
+                    ->bind([':search1', ':search2', ':search3'], $search);
+            }
+        }
+
+        // Add the list ordering clause.
+        $orderCol  = $this->state->get('list.ordering', 'a.ordering');
+        $orderDirn = $this->state->get('list.direction', 'ASC');
+
+        $query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
+
+        return $query;
     }
 
 }
