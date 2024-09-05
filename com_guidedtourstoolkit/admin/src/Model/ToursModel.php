@@ -80,6 +80,10 @@ class ToursModel extends ListModel
                 $columns[] = 'uid';
             }
 
+            if (version_compare(JVERSION, '5.1', '>=')) {
+                $columns[] = 'autostart';
+            }
+
             $values = [
                 $tour['title'],
                 $tour['description'] ?? '',
@@ -105,6 +109,14 @@ class ToursModel extends ListModel
                 }
             }
 
+            if (version_compare(JVERSION, '5.1', '>=')) {
+                if (isset($tour['autostart'])) {
+                    $values[] = $tour['autostart'];
+                } else {
+                    $values[] = 0;
+                }
+            }
+
             $dataTypes = [
                 ParameterType::STRING,
                 ParameterType::STRING,
@@ -123,6 +135,10 @@ class ToursModel extends ListModel
 
             if (version_compare(JVERSION, '5.0', '>=')) {
                 $dataTypes[] = ParameterType::STRING;
+            }
+
+            if (version_compare(JVERSION, '5.1', '>=')) {
+                $dataTypes[] = ParameterType::INTEGER;
             }
 
             $query->insert($db->quoteName('#__guidedtours'), 'id');
@@ -176,6 +192,11 @@ class ToursModel extends ListModel
                         ParameterType::STRING,
                     ];
 
+                    if (version_compare(JVERSION, '5.1', '>=')) {
+                        $columns[] = 'params';
+                        $dataTypes[] = ParameterType::STRING;
+                    }
+
                     $step_values = [];
 
                     foreach ($tour['steps'] as $step) {
@@ -204,10 +225,12 @@ class ToursModel extends ListModel
                             $step['note'] ?? '',
                         ];
 
-                        if (isset($step['params']) && version_compare(JVERSION, '5.1', '>=')) {
-                            $columns[] = 'params';
-                            $tmp_step_values[] = json_encode($step['params']);
-                            $dataTypes[] = ParameterType::STRING;
+                        if (version_compare(JVERSION, '5.1', '>=')) {
+                            if (isset($step['params'])) {
+                                $tmp_step_values[] = json_encode($step['params']);
+                            } else {
+                                $tmp_step_values[] = null;
+                            }
                         }
 
                         $step_values[] = $tmp_step_values;
