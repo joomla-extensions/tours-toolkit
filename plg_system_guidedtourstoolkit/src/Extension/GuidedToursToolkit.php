@@ -80,10 +80,24 @@ final class GuidedToursToolkit extends CMSPlugin implements SubscriberInterface
             // Get the toolbar object instance
             $toolbar = Toolbar::getInstance('toolbar');
 
-            $button = (new LinkButton('export'))
-            ->text('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_EXPORT')
-            ->url('index.php?option=com_guidedtourstoolkit&task=tour.export&id=' . $input->getInt('id', 0))
-            ->icon('icon-upload');
+            $button = (new LinkButton('exportsql'))
+                ->text('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_EXPORTSQL')
+                ->url('index.php?option=com_guidedtourstoolkit&task=tour.exportsql&id=' . $input->getInt('id', 0))
+                ->icon('icon-upload');
+
+            $toolbar->appendButton($button);
+
+            $button = (new LinkButton('exportsqlini'))
+                ->text('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_EXPORTSQLINI')
+                ->url('index.php?option=com_guidedtourstoolkit&task=tour.exportsqlini&id=' . $input->getInt('id', 0))
+                ->icon('icon-upload');
+
+            $toolbar->appendButton($button);
+
+            $button = (new LinkButton('exportjson'))
+                ->text('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_EXPORTJSON')
+                ->url('index.php?option=com_guidedtourstoolkit&task=tour.exportjson&id=' . $input->getInt('id', 0))
+                ->icon('icon-upload');
 
             $toolbar->appendButton($button);
         }
