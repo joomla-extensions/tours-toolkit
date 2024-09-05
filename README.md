@@ -29,7 +29,8 @@ pkg_guidedtourstoolkit.zip will install both extensions and enable the plugin.
 ![guidedtourstoolkit](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/ed78f41c-9f31-4247-b82b-c0b4378ec5b8)
 
 ## Export a tour to json, SQL, SQL with language keys
-![guidedtourstoolkit_exporttour](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/04af9b1c-ffe1-499d-9254-0fcb28b2dcda)
+![image](https://github.com/user-attachments/assets/961d52b4-bf68-4f45-a8fd-9a5789f427c8)
 
 ## Import steps as CSV
-![import_as_csv](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/b85324e8-1fb2-42b1-a38e-b0b706bfbdc7)
+![image](https://github.com/user-attachments/assets/a8f7774f-3ef0-4ed9-99ca-4422a35a99e4)
+
