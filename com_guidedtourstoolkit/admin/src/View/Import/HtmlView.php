@@ -71,6 +71,8 @@ class HtmlView extends BaseHtmlView
     if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_guidedtourstoolkit')) {
       $toolbar->preferences('com_guidedtourstoolkit');
     }
+
+    $toolbar->help(null, false, 'https://manual.joomla.org/docs/next/general-concepts/guided-tours');
   }
 
 }
