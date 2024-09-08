@@ -52,7 +52,7 @@ class TourController extends AdminController
      */
     protected function export($id)
     {
-        $factory = $this->app->bootComponent('com_guidedtours')->getMVCFactory();
+        $factory   = $this->app->bootComponent('com_guidedtours')->getMVCFactory();
         $tourModel = $factory->createModel('Tour', 'Administrator', ['ignore_request' => true]);
 
         $factory    = $this->app->bootComponent('com_guidedtourstoolkit')->getMVCFactory();
@@ -231,6 +231,22 @@ class TourController extends AdminController
                 }
             }
 
+            // uninstall SQL
+
+            echo "\n\n" . '-- uninstall mySQL';
+
+            if (!empty($tour_data['steps'])) {
+                echo "\n\n" . $this->generateUninstallStepsSQL($tour_data, '`') . ';';
+            }
+            echo "\n\n" . $this->generateUninstallTourSQL($tour_data, '`') . ';';
+
+            echo "\n\n" . '-- uninstall postgreSQL';
+
+            if (!empty($tour_data['steps'])) {
+                echo "\n\n" . $this->generateUninstallStepsSQL($tour_data) . ';';
+            }
+            echo "\n\n" . $this->generateUninstallTourSQL($tour_data) . ';';
+
             $this->app->close();
 
         } catch (\Exception $e) {
@@ -381,8 +397,9 @@ class TourController extends AdminController
     /**
      * Generate steps SQL
      *
-     * @param  array $tour
-     * @param  string $quotes to differentiate between MySQL and PostgreSQL
+     * @param  array    $tour
+     * @param  boolean  $includeLanguageKeys
+     * @param  string   $quotes to differentiate between MySQL and PostgreSQL
      *
      * @return string
      *
@@ -455,6 +472,42 @@ class TourController extends AdminController
 
         $output .= "\n" . '  FROM ' . $quotes . '#__guidedtours' . $quotes;
         $output .= "\n" . ' WHERE ' . $quotes . 'uid' . $quotes . ' = \'' . $tour['uid'] . '\'';
+
+        return $output;
+    }
+
+    /**
+     * Generate uninstall tour script SQL
+     *
+     * @param  array $tour
+     * @param  string $quotes to differentiate between MySQL and PostgreSQL
+     *
+     * @return string
+     */
+    protected function generateUninstallTourSQL($tour, $quotes = '"')
+    {
+        $output = '';
+
+        $output .= 'DELETE FROM ' . $quotes . '#__guidedtours' . $quotes;
+        $output .= "\n" . ' WHERE ' . $quotes . 'uid' . $quotes . ' = \'' . $tour['uid'] . '\'';
+
+        return $output;
+    }
+
+    /**
+     * Generate uninstall steps script SQL
+     *
+     * @param  array $tour
+     * @param  string $quotes to differentiate between MySQL and PostgreSQL
+     *
+     * @return string
+     */
+    protected function generateUninstallStepsSQL($tour, $quotes = '"')
+    {
+        $output = '';
+
+        $output .= 'DELETE FROM ' . $quotes . '#__guidedtour_steps' . $quotes;
+        $output .= "\n" . ' WHERE ' . $quotes . 'tour_id' . $quotes . ' = (SELECT ' . $quotes . 'id' . $quotes . ' FROM ' . $quotes . '#__guidedtours' . $quotes . ' WHERE ' . $quotes . 'uid' . $quotes . ' = \'' . $tour['uid'] . '\')';
 
         return $output;
     }
