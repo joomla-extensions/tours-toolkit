@@ -295,7 +295,7 @@ class TourController extends AdminController
 
         if (!empty($language_keys)) {
             foreach($language_keys as $key => $value) {
-                $output .= $key . ' = "' . $value . '"' . "\n";
+                $output .= $key . '="' . $value . '"' . "\n";
             }
         }
 
@@ -322,7 +322,7 @@ class TourController extends AdminController
 
         if (!empty($language_keys)) {
             foreach($language_keys as $key => $value) {
-                $output .= $key . ' = "' . $value . '"' . "\n";
+                $output .= $key . '="' . $value . '"' . "\n";
             }
         }
 
