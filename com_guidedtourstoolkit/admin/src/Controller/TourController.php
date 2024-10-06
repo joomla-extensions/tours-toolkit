@@ -216,8 +216,11 @@ class TourController extends AdminController
             foreach ($tours_data as $tour_data) {
                 echo "\n\n" . $this->generateTourSQL($tour_data, $includeLanguageKeys, '`') . ';';
                 if (!empty($tour_data['steps'])) {
-                    echo "\n\n" . $this->generateStepsSQL($tour_data, $includeLanguageKeys, '`') . ';';
+                    echo "\n\n" . $this->generateStepsSQL($tour_data, $includeLanguageKeys, '`');
                 }
+//                if (!empty($tour_data['steps'])) {
+//                    echo "\n\n" . 'UPDATE `#__guidedtour_steps` SET `tour_id` = LAST_INSERT_ID() WHERE `tour_id`=0;';
+//                }
             }
 
             // output postgreSQL
@@ -227,8 +230,11 @@ class TourController extends AdminController
             foreach ($tours_data as $tour_data) {
                 echo "\n\n" . $this->generateTourSQL($tour_data, $includeLanguageKeys) . ';';
                 if (!empty($tour_data['steps'])) {
-                    echo "\n\n" . $this->generateStepsSQL($tour_data, $includeLanguageKeys) . ';';
+                    echo "\n\n" . $this->generateStepsSQL($tour_data, $includeLanguageKeys);
                 }
+//                if (!empty($tour_data['steps'])) {
+//                    echo "\n\n" . 'UPDATE "#__guidedtour_steps" SET "tour_id" = currval(pg_get_serial_sequence(\'#__guidedtours\',\'id\')) WHERE "tour_id"=0;';
+//                }
             }
 
             // uninstall SQL
@@ -339,59 +345,104 @@ class TourController extends AdminController
      */
     protected function generateTourSQL($tour, $includeLanguageKeys = false, $quotes = '"')
     {
-        $keys = array_keys($tour);
-        if (!in_array('created', $keys)) {
-            $keys[] = 'created';
-        }
-        if (!in_array('created_by', $keys)) {
-            $keys[] = 'created_by';
-        }
-        if (!in_array('modified', $keys)) {
-            $keys[] = 'modified';
-        }
-        if (!in_array('modified_by', $keys)) {
-            $keys[] = 'modified_by';
-        }
-
-        $keys_to_escape = ['title', 'description', 'uid', 'extensions', 'url', 'language', 'note'];
-
-        $output_array = [];
-        foreach($keys as $key) {
-            if ($key == 'steps') {
-                continue;
-            }
-            $output_array[] = $quotes . $key . $quotes;
-        }
-
-        $output = 'INSERT INTO ' . $quotes . '#__guidedtours' . $quotes . ' (' . implode(', ', $output_array) . ') VALUES' . "\n";
-
+        $language_key_prefix = '';
         if ($includeLanguageKeys) {
             $language_key_prefix = $this->generateLanguagePrefix($tour);
         }
 
-        $output_array = [];
-        foreach($keys as $key) {
+        $columns = array_keys($tour);
 
-            if ($key == 'steps') {
-                continue;
+        if (in_array('steps', $columns)) {
+            unset($columns[array_search('steps', $columns)]);
+        }
+
+        $columns_to_add_if_missing = ['created', 'created_by', 'modified', 'modified_by'];
+
+        foreach ($columns_to_add_if_missing as $column) {
+            if (!in_array($column, $columns)) {
+                $columns[] = $column;
             }
-            if ($key == 'created' || $key == 'modified') {
+        }
+
+        $columns_to_escape = ['title', 'description', 'uid', 'extensions', 'url', 'language', 'note'];
+
+        $output = 'INSERT INTO ' . $quotes . '#__guidedtours' . $quotes . ' (' . implode(', ', array_map(function($column) use ($quotes) { return $quotes . $column . $quotes; }, $columns)) . ') VALUES' . "\n";
+
+        $output_array = [];
+        foreach ($columns as $column) {
+            if ($column == 'created' || $column == 'modified') {
                 $output_array[] = 'CURRENT_TIMESTAMP' . ($quotes !== '"' ? '()' : '');
                 continue;
             }
-            if ($key == 'created_by' || $key == 'modified_by') {
+
+            if ($column == 'created_by' || $column == 'modified_by') {
                 $output_array[] = '0';
                 continue;
             }
 
-            if ($includeLanguageKeys && ($key == 'title' || $key == 'description')) {
-                $tour[$key] = $language_key_prefix . '_' . strtoupper($key);
+            if ($language_key_prefix && ($column == 'title' || $column == 'description')) {
+                $tour[$column] = $language_key_prefix . '_' . strtoupper($column);
             }
 
-            $output_array[] = in_array($key, $keys_to_escape) ? '\'' . $tour[$key] . '\'' : $tour[$key];
+            $output_array[] = in_array($column, $columns_to_escape) ? '\'' . str_replace(["'"], ["\'"], $tour[$column]) . '\'' : $tour[$column];
         }
 
         return $output . '(' . implode(', ', $output_array) . ')';
+    }
+
+    /**
+     * Generate step SQL
+     *
+     * @param  integer  $step_number
+     * @param  array    $step
+     * @param  array    $columns
+     * @param  array    $columns_to_escape
+     * @param  string   $tour_uid
+     * @param  boolean  $language_key_prefix
+     * @param  string   $quotes to differentiate between MySQL and PostgreSQL
+     *
+     * @return string
+     *
+     */
+    protected function generateStepSQL($step_number, $step, $columns, $columns_to_escape, $tour_uid, $language_key_prefix = '', $quotes = '"')
+    {
+        $output = '';
+
+        $output .= 'INSERT INTO ' . $quotes . '#__guidedtour_steps' . $quotes . ' (' . implode(', ', array_map(function($column) use ($quotes) { return $quotes . $column . $quotes; }, $columns)) . ')';
+        $output .= "\n" . 'SELECT ';
+
+        $output_array = [];
+
+        foreach ($columns as $column) {
+
+            if ($column == 'tour_id') {
+                $output_array[] = 'MAX(' . $quotes . 'id' . $quotes . ')';
+                continue;
+            }
+
+            if ($column == 'created' || $column == 'modified') {
+                $output_array[] = 'CURRENT_TIMESTAMP' . ($quotes !== '"' ? '()' : '');
+                continue;
+            }
+
+            if ($column == 'created_by' || $column == 'modified_by') {
+                $output_array[] = '0';
+                continue;
+            }
+
+            if ($language_key_prefix && ($column == 'title' || $column == 'description')) {
+                $step[$column] = $language_key_prefix . '_STEP_' . $step_number . '_' . strtoupper($column);
+            }
+
+            $output_array[] = in_array($column, $columns_to_escape) ? '\'' . str_replace(["'"], ["\'"], $step[$column]) . '\'' : $step[$column];
+        }
+
+        $output .= implode(', ', $output_array);
+
+        $output .= "\n" . '  FROM ' . $quotes . '#__guidedtours' . $quotes;
+        $output .= "\n" . ' WHERE ' . $quotes . 'uid' . $quotes . ' = \'' . $tour_uid . '\';';
+
+        return $output;
     }
 
     /**
@@ -406,74 +457,30 @@ class TourController extends AdminController
      */
     protected function generateStepsSQL($tour, $includeLanguageKeys = false, $quotes = '"')
     {
-        $output = '';
-
-        $keys = array_keys($tour['steps'][0]);
-        if (!in_array('tour_id', $keys)) {
-            $keys[] = 'tour_id';
-        }
-        if (!in_array('created', $keys)) {
-            $keys[] = 'created';
-        }
-        if (!in_array('created_by', $keys)) {
-            $keys[] = 'created_by';
-        }
-        if (!in_array('modified', $keys)) {
-            $keys[] = 'modified';
-        }
-        if (!in_array('modified_by', $keys)) {
-            $keys[] = 'modified_by';
-        }
-
-        $keys_to_escape = ['title', 'description', 'position', 'target', 'url', 'language', 'note', 'params'];
-
-        $output_array = [];
-        foreach($keys as $key) {
-            $output_array[] = $quotes . $key . $quotes;
-        }
-
-        $output .= 'INSERT INTO ' . $quotes . '#__guidedtour_steps' . $quotes . ' (' . implode(', ', $output_array) . ')';
-        $output .= "\n" . 'SELECT ';
-
+        $language_key_prefix = '';
         if ($includeLanguageKeys) {
             $language_key_prefix = $this->generateLanguagePrefix($tour);
         }
 
-        $output_array = [];
-        foreach ($tour['steps'] as $step_key => $step) {
-            $output_array_internal = [];
-            foreach($keys as $key) {
+        $columns = array_keys($tour['steps'][0]);
 
-                if ($key == 'tour_id') {
-                    $output_array_internal[] = 'MAX(' . $quotes . 'id' . $quotes . ')';
-                    continue;
-                }
+        $columns_to_add_if_missing = ['created', 'created_by', 'modified', 'modified_by', 'tour_id'];
 
-                if ($key == 'created' || $key == 'modified') {
-                    $output_array_internal[] = 'CURRENT_TIMESTAMP' . ($quotes !== '"' ? '()' : '');
-                    continue;
-                }
-
-                if ($key == 'created_by' || $key == 'modified_by') {
-                    $output_array_internal[] = '0';
-                    continue;
-                }
-
-                if ($includeLanguageKeys && ($key == 'title' || $key == 'description')) {
-                    $step[$key] = $language_key_prefix . '_STEP_' . $step_key . '_' . strtoupper($key);
-                }
-
-                $output_array_internal[] = in_array($key, $keys_to_escape) ? '\'' . $step[$key] . '\'' : $step[$key];
+        foreach ($columns_to_add_if_missing as $column) {
+            if (!in_array($column, $columns)) {
+                $columns[] = $column;
             }
-            $output_array[] = implode(', ', $output_array_internal);
         }
 
-        $output .= implode(', ', $output_array);
+        $columns_to_escape = ['title', 'description', 'position', 'target', 'url', 'language', 'note', 'params'];
 
-        $output .= "\n" . '  FROM ' . $quotes . '#__guidedtours' . $quotes;
-        $output .= "\n" . ' WHERE ' . $quotes . 'uid' . $quotes . ' = \'' . $tour['uid'] . '\'';
+        $output_array = [];
 
-        return $output;
+        foreach ($tour['steps'] as $key => $step) {
+            $output_array[] = $this->generateStepSQL($key, $step, $columns, $columns_to_escape, $tour['uid'], $language_key_prefix, $quotes);
+        }
+
+        return implode("\n\n", $output_array);
     }
 
     /**
