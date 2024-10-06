@@ -10,6 +10,9 @@
 
 namespace Joomla\Plugin\System\GuidedToursToolkit\Extension;
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\Button\LinkButton;
@@ -32,8 +35,58 @@ final class GuidedToursToolkit extends CMSPlugin implements SubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return  [
-            'onBeforeRender' => 'onBeforeRender',
+            'onBeforeCompileHead' => 'onBeforeCompileHead',
+            'onBeforeRender'      => 'onBeforeRender',
         ];
+    }
+
+    /**
+     * Listener for the `onBeforeCompileHead` event
+     *
+     * @return  void
+     */
+    public function onBeforeCompileHead()
+    {
+        $app    = $this->getApplication();
+        $doc    = $app->getDocument();
+        $user   = $app->getIdentity();
+        $params = ComponentHelper::getParams('com_guidedtourstoolkit');
+
+        if ($user != null && $user->id > 0 && $params->get('selectorTool', 1)) {
+            // Load plugin language files.
+            $this->loadLanguage();
+
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_COPIED');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_COPY');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_EXPLAIN_FANCYSELECT');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_EXPLAIN_HREF');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_EXPLAIN_NUMBERS');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_EXPLAIN_ONLY_IN_MONOLINGUAL');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_OFF');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_ON');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_ONOFF');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_SELECT_ELEMENT');
+            Text::script('PLG_SYSTEM_GUIDEDTOURSTOOLKIT_SELECTORTOOL_UNUSABLE_SELECTOR');
+
+            HTMLHelper::_(
+                'stylesheet',
+                'plg_system_guidedtourstoolkit/selectortool.min.css',
+                ['version' => 'auto', 'relative' => true]
+                );
+
+            HTMLHelper::_(
+                'script',
+                'plg_system_guidedtourstoolkit/selectortool.min.js',
+                ['version' => 'auto', 'relative' => true],
+                ['type' => 'module'],
+                ['core']
+                );
+
+            // Load required assets.
+            // Cannot make this work
+            //$doc->getWebAssetManager()
+                //->usePreset('plg_system_guidedtourstoolkit.selectortool');
+        }
     }
 
     /**
