@@ -1,0 +1,68 @@
+.toolkit-highlight {
+	background-color: #ffe51f !important;
+	color: #202020 !important;
+}
+
+#toolkitBar {
+	background-color: #ffe51f;
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+	justify-content: flex-end;
+	max-width: 640px;
+	right: 30px;
+	bottom: 30px;
+	position: fixed;
+	box-shadow: 1px 1px 5px rgba(0, 0, 0, .5);
+	border-radius: 20px;
+	z-index: 2000;
+}
+
+#toolkitBar .fas {
+	transform: scale(1.6);
+}
+
+#selectorDisplay {
+	display: flex;
+	align-items: center;
+	border-radius: 5px;
+}
+
+#toggleButton {
+	display: flex;
+	align-items: center;
+}
+
+#toggleButton, #copyButton {
+	color: black;
+	border: none;
+}
+
+#selectorLayer {
+	display: flex;
+	flex-direction: column;
+	color: #202020;
+	padding: 0 10px;
+}
+
+#selectorText {
+	word-break: break-all;
+}
+
+#selectorExplanation {
+	font-size: .8em;
+}
+
+#successLayer {
+	color: #3d854d;
+	opacity: 0;
+	transition: opacity 0.5s ease-in-out;
+}
+
+#successLayer.hide {
+	opacity: 0;
+}
+
+#successLayer.show {
+	opacity: 1;
+}

@@ -1,0 +1,35 @@
+{
+    "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+    "name": "plg_system_guidedtourstoolkit",
+    "version": "1.0.4",
+    "description": "Joomla CMS",
+    "license": "GPL-2.0-or-later",
+    "assets": [
+      {
+        "name": "plg_system_guidedtourstoolkit.selectortool",
+        "type": "preset",
+        "dependencies": [
+          "plg_system_guidedtourstoolkit.selectortool#style",
+          "plg_system_guidedtourstoolkit.selectortool#script"
+        ]
+      },
+      {
+        "name": "plg_system_guidedtourstoolkit.selectortool",
+        "type": "style",
+        "uri": "plg_system_guidedtourstoolkit/selector_tool.min.css",
+        "version": "382f6f"
+      },
+      {
+        "name": "plg_system_guidedtourstoolkit.selectortool",
+        "type": "script",
+        "uri": "plg_system_guidedtourstoolkit/selector_tool.min.js",
+        "dependencies": [
+          "core"
+        ],
+        "attributes": {
+          "type": "module"
+        },
+        "version": "5e5584"
+      }
+    ]
+  }
