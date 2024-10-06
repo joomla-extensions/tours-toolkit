@@ -68,7 +68,7 @@ class HtmlView extends BaseHtmlView
 
     $toolbar->appendButton($button);
 
-    if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_guidedtourstoolkit')) {
+    if ($user->authorise('core.admin', 'com_guidedtourstoolkit')) {
       $toolbar->preferences('com_guidedtourstoolkit');
     }
 
