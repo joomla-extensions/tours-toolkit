@@ -16,13 +16,13 @@
       {
         "name": "plg_system_guidedtourstoolkit.selectortool",
         "type": "style",
-        "uri": "plg_system_guidedtourstoolkit/selector-tool.min.css",
+        "uri": "plg_system_guidedtourstoolkit/selectortool.min.css",
         "version": "382f6f"
       },
       {
         "name": "plg_system_guidedtourstoolkit.selectortool",
         "type": "script",
-        "uri": "plg_system_guidedtourstoolkit/selector-tool.min.js",
+        "uri": "plg_system_guidedtourstoolkit/selectortool.min.js",
         "dependencies": [
           "core"
         ],
