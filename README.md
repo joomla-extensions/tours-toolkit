@@ -18,11 +18,11 @@ As of now, the toolkit includes a plugin and a component that allow to:
 Check Releases for further information.
 pkg_guidedtourstoolkit.zip will install both extensions and enable the plugin.
 
-## Import tours as json
-![guidedtourstoolkit](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/ed78f41c-9f31-4247-b82b-c0b4378ec5b8)
-
 ## Export a tour to json, SQL, SQL with language keys
 ![image](https://github.com/user-attachments/assets/25632adc-1138-44ac-9c5b-b8f6603ca3f3)
+
+## Import tours as json
+![guidedtourstoolkit](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/ed78f41c-9f31-4247-b82b-c0b4378ec5b8)
 
 ## Import steps as CSV
 ![image](https://github.com/user-attachments/assets/a8f7774f-3ef0-4ed9-99ca-4422a35a99e4)
