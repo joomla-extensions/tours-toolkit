@@ -29,6 +29,15 @@ pkg_guidedtourstoolkit.zip will install both extensions and enable the plugin.
 
 ## Select elements on the page with the selector tool
 
+Enable the selector tool.
+![image](https://github.com/user-attachments/assets/22314f2a-caa5-49d9-b2e1-35fb26a3bb14)
+
+The selector tool needs to be turned on to start the selection. Turn off to navugate to other pages.
+![image](https://github.com/user-attachments/assets/7738acca-64ab-42d4-9d24-5ee2af2414c2)
+
+Select an element on the page and copy the result.
+![image](https://github.com/user-attachments/assets/72611625-d0db-4394-ae8c-1dd8ad30bef1)
+
 ## The packaging tool
 
 This is a work in progress.
