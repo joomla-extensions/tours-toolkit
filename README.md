@@ -22,7 +22,7 @@ pkg_guidedtourstoolkit.zip will install both extensions and enable the plugin.
 ![guidedtourstoolkit](https://github.com/joomla-extensions/tours-toolkit/assets/5964177/ed78f41c-9f31-4247-b82b-c0b4378ec5b8)
 
 ## Export a tour to json, SQL, SQL with language keys
-![image](https://github.com/user-attachments/assets/961d52b4-bf68-4f45-a8fd-9a5789f427c8)
+![image](https://github.com/user-attachments/assets/25632adc-1138-44ac-9c5b-b8f6603ca3f3)
 
 ## Import steps as CSV
 ![image](https://github.com/user-attachments/assets/a8f7774f-3ef0-4ed9-99ca-4422a35a99e4)
@@ -32,7 +32,7 @@ pkg_guidedtourstoolkit.zip will install both extensions and enable the plugin.
 Enable the selector tool.
 ![image](https://github.com/user-attachments/assets/22314f2a-caa5-49d9-b2e1-35fb26a3bb14)
 
-The selector tool needs to be turned on to start the selection. Turn off to navugate to other pages.
+The selector tool needs to be turned on to start the selection. Turn off to navigate to other pages.
 ![image](https://github.com/user-attachments/assets/7738acca-64ab-42d4-9d24-5ee2af2414c2)
 
 Select an element on the page and copy the result.
