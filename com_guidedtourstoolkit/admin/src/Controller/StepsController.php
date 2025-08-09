@@ -10,7 +10,6 @@
 
 namespace Joomla\Component\Guidedtourstoolkit\Administrator\Controller;
 
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\Router\Route;
@@ -64,7 +63,7 @@ class StepsController extends AdminController
             return;
         }
 
-        if (!File::exists($file['tmp_name'])) {
+        if (!is_file($file['tmp_name'])) {
             $this->setRedirect($redirect, Text::_('COM_GUIDEDTOURSTOOLKIT_IMPORT_MISSING_FILE_ERROR'), 'error');
             return;
         }
