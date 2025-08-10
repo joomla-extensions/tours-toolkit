@@ -7,7 +7,7 @@
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>admin@joomla.org</authorEmail>
     <authorUrl>www.joomla.org</authorUrl>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <description>PLG_SYSTEM_GUIDEDTOURSTOOLKIT_XML_DESCRIPTION</description>
     <namespace path="src">Joomla\Plugin\System\GuidedToursToolkit</namespace>
     <media folder="media" destination="plg_system_guidedtourstoolkit">
@@ -24,3 +24,4 @@
         <language tag="en-GB">language/en-GB/plg_system_guidedtourstoolkit.sys.ini</language>
     </languages>
 </extension>
+
