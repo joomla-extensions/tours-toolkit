@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+    <name>pkg_guidedtourstoolkit</name>
+    <author>Joomla! Project</author>
+    <creationDate>2025-08-09</creationDate>
+    <packagename>guidedtourstoolkit</packagename>
+    <copyright>(C) 2005 - 2025 Open Source Matters, Inc.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>admin@joomla.org</authorEmail>
+    <authorUrl>www.joomla.org</authorUrl>
+    <version>1.0.5</version>
+    <description>Toolkit installer</description>
+    <scriptfile>installer.php</scriptfile>
+    <files folder="packages">
+        <file type="component" id="com_guidedtourstoolkit">com_guidedtourstoolkit.zip</file>
+        <file type="plugin" id="guidedtourstoolkit" group="system">plg_system_guidedtourstoolkit.zip</file>
+    </files>
+	<updateservers>
+		<server type="extension" name="Guided Tours Toolkit Update Site">https://raw.githubusercontent.com/joomla-extensions/tours-toolkit/main/manifest.xml</server>
+	</updateservers>
+</extension>
